@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# 2014-02-12:v1
+
+CACHE:
+index.html
+/static/style.css
+/static/cards.js
+/static/card-cover.jpg
+/static/sound-1.mp3
+

@@ -1,0 +1,129 @@
+* {margin: 0; padding: 0;}
+ 
+body {
+  background: #00a651;
+}
+.sideBox{
+	width:580px;
+	margin-left: auto;
+	margin-right: auto;
+
+}
+ 
+.card {
+  position: relative;
+  float: left;
+  margin: 10px;
+  width: 100px;
+  height: 147px;
+  border-radius: 10px;
+  background: #fff;
+  -webkit-box-shadow: 3px 3px 7px rgba(0,0,0,0.3);
+  box-shadow: 3px 3px 7px rgba(0,0,0,0.3);
+ 
+}
+.card p{
+  text-align: center;
+  font: 70px/147px Georgia, Times New Roman, serif;
+}
+.suitdiamonds
+{
+	color: #ff0000;
+}
+.suitdiamonds:before, .suitdiamonds:after {
+  content: "♦";
+  color: #ff0000;
+}
+
+.suithearts{
+	color: #ff0000;
+} 
+.suithearts:before, .suithearts:after {
+  content: "♥";
+  color: #ff0000;
+}
+ 
+.suitclubs
+{
+	color: #000;
+}
+.suitclubs:before, .suitclubs:after {
+  content: "♣";
+  color: #000;
+}
+ 
+.suitspades{
+	color:#000;
+}
+.suitspades:before, .suitspades:after {
+  content: "♠";
+  color: #000;
+}
+
+div[class*='suit']:before {
+  position: absolute;
+  font-size: 20px;
+  left: 8px;
+  top: 0px;
+}
+ 
+div[class*='suit']:after {
+  position: absolute;
+  font-size: 20px;
+  right: 8px;
+  bottom: 0px;
+}
+
+.card:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 1px 1px 7px rgba(0,0,0,0.4);
+  box-shadow: 1px 1px 7px rgba(0,0,0,0.4);
+}
+
+/*.grow > .card:hover {
+	-webkit-box-shadow: 1px 1px 7px rgba(0,0,0,0.9);
+	box-shadow: 1px 1px 7px rgba(0,0,0,0.9);
+	-webkit-transform: scale(1.05,1.05);
+	-moz-transform: scale(1.05,1.05);
+	-o-transform: scale(1.05,1.05);
+	-ms-transform: scale(1.05,1.05);
+	transform: scale(1.05,1.05);
+}
+.grow > .card {
+	-webkit-transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
+	-ms-transition: all 0.5s ease;
+	transition: all 0.5s ease;
+}*/
+
+.cover{
+	float: left;
+	width: 100px;
+	height: 147px;
+	border-radius: 10px;
+	position: absolute;
+	font-size: 80px;
+	z-index: 2;
+	top:0px;
+
+	background-image:url('../images/card-cover.jpg');
+}
+
+.wrapper{
+  margin-left: auto;
+  margin-right: auto;
+  width: 600px;
+  overflow: hidden;
+}
+.player-info
+{
+  padding-top: 20px;
+  padding-right: 120px;
+  height: 100px;
+}
+.player-info h2
+{
+  margin-bottom: 10px;
+
+}
