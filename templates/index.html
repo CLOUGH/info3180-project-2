@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="en" ><!--manifest="manifest.appcache"-->
+<html class="no-js" lang="en" manifest="manifest.appcache">
 	<head>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
 		<link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/semantic.css')}}">
@@ -12,26 +12,65 @@
 			<source src="{{ url_for('static', filename='sound-1.mp3') }}"></source>
 			Your browser does not support HTML5 audio
 		</audio>
+		<audio id="card-flick">
+			<source src="{{ url_for('static', filename='page-flip-01a.mp3') }}"></source>
+			Your browser does not support HTML5 audio
+		</audio>
+		<audio id="victory-song">
+			<source src="{{ url_for('static', filename='victory-song.mp3') }}"></source>
+			Your browser does not support HTML5 audio
+		</audio>
 		<div class="wrapper">
 			<div class="player-info">
 				<h2>Player Info</h2>
-				<div class="ui two column grid">
-					<div class="column">
+				<div class="ui three column grid">
+					<div class="six wide column">
 						<div>
 						Player Name: <span id="player_name"></span>
 						<button class="mini ui button" id="new-player-name">new</button>
 						</div>
 					</div>
-					<div class="column">
-						<div style="text-align:right">
+					<div class="five wide column">
+						<button class="ui button blue" id="save-button">Save</button>
+					</div>
+					<div class="three wide column">
+						<div>
 							Flips: <span id="card-flips">0</span>/<span id="max-flips">26</span>
 						</div>
 					</div>
 				</div>
 				
 			</div>
-			<div class="sideBox grow"></div>
-			<div class="ui small modal">
+			<div class="sideBox grow" id="card-box"></div>
+			<div class="ui small modal" id="win-modal">
+				<i class="close icon"></i>
+				<div class="header">
+					<h3>You Won</h3>
+				</div>
+				<div class="content">
+					<p>You have won! Do you want to play again?	</p>
+				</div>
+				<div class="actions">
+					<button class="ui negative button ">No</button>
+					<button class="ui positive right button"  onclick="playAgain()">Yes</button>
+				</div>
+			</div>
+			<div class="ui small modal" id="lost-modal">
+				<i class="close icon"></i>
+				<div class="header">
+					<h3>You Lost</h3>
+				</div>
+				<div class="content">
+					<p>Sorry you have reached the max flips of <span id="max-flip"></span>! 
+					Do you want to play again?
+					</p>
+				</div>
+				<div class="actions">
+					<button class="ui negative button" >No</button>
+					<button class="ui positive right button" onclick="playAgain()">Yes</button>
+				</div>
+			</div>
+			<div class="ui small modal" id="player-modal">
 				<div class="header">
 					<h3>Player Name</h3>
 				</div>
@@ -56,32 +95,77 @@
 			</div>
 		</div>
 		<script type="text/javascript">
-			$(document).ready(function(){
-				var fname = localStorage.getItem("player_fname")
-				var lname = localStorage.getItem("player_lname")
-				if((fname === null || fname === undefined || fname === "" ) ||
-					(lname === null || lname === undefined || lname === "" ))
-				{		
-					$('.ui.small.modal').modal('setting', 'closable', false).modal('show');					
-				}
-				else
-				{
-					$('#player_name').text(fname+" "+lname);		
-				}
-				$('#new-player-form').submit(function(event){
-					fname = $('input[name="fname"]').val();
-					lname = $('input[name="lname"]').val();
-					localStorage.setItem('player_fname', fname);
-					localStorage.setItem('player_lname', lname);
-					
-					updatePlayerInfo();
-					
-				});	
+			$(document).ready(function(){		
 
-				$('#new-player-name').click(function(){
-					$('.ui.small.modal').modal('setting', 'closable', false).modal('show');
-		
-				});
+				var test = localStorage.getItem('card-deck');
+				if(test=== null)  {
+				    deck = generateRandDeck(createDeck());
+				    showDeck(deck);
+
+				    $('#player-modal').modal('setting', 'closable', false).modal('show');	
+
+				}
+				else{
+					fname = localStorage.getItem('player_fname');
+					lname = localStorage.getItem('player_lname');					
+					deck = JSON.parse(localStorage.getItem('card-deck'));
+					found_matches = JSON.parse(localStorage.getItem('found-cards'));
+  					card_flips = JSON.parse(localStorage.getItem('card-flips'));
+  					cards_selected_index = JSON.parse(localStorage.getItem('selected-cards'));
+
+  					showDeck(deck);
+
+  					for(var i=0;i<cards_selected_index.length;i++)
+  					{
+  						cards_selected.push(document.getElementById(cards_selected_index[i]));
+  					}
+
+					
+					turnFlipedCards(found_matches);
+					turnFlipedCards(cards_selected_index);
+					updatePlayerInfo();
+				}
+
+			});
+			$('#new-player-form').submit(function(event){
+				fname = $('input[name="fname"]').val();
+				lname = $('input[name="lname"]').val();
+				
+				updatePlayerInfo();
+				return false;
+				
+			});	
+
+			$('#new-player-name').click(function(){
+				$('#player-modal').modal('setting', 'closable', false).modal('show');
+	
+				localStorage.removeItem('player_fname');
+				localStorage.removeItem('player_lname');					
+				localStorage.removeItem('card-deck');
+				localStorage.removeItem('found-cards');
+				localStorage.removeItem('card-flips');
+				localStorage.removeItem('selected-cards');
+				$('#card-box').empty();
+				
+				found_matches = new Array();	
+				cards_selected_index = new Array();
+				cards_selected = new Array();
+				deck = generateRandDeck(createDeck());
+				showDeck(deck);				
+				card_flips = 0;				
+				updatePlayerInfo();
+
+
+			});
+
+			$('#save-button').click(function(){
+				localStorage.setItem('card-deck',JSON.stringify(deck));
+				localStorage.setItem('found-cards',JSON.stringify(found_matches));
+				localStorage.setItem('player_fname', fname);
+				localStorage.setItem('player_lname', lname);
+  				localStorage.setItem('card-flips', JSON.stringify(card_flips));
+  				cards_selected_index;
+  				localStorage.setItem('selected-cards',JSON.stringify(cards_selected_index));				
 			});			
 		</script>
 		<script src="{{ url_for('static', filename='cards.js') }}"></script>

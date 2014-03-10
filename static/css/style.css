@@ -119,7 +119,6 @@ div[class*='suit']:after {
 .player-info
 {
   padding-top: 20px;
-  padding-right: 120px;
   height: 100px;
 }
 .player-info h2

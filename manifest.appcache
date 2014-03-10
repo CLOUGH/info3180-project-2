@@ -3,8 +3,13 @@ CACHE MANIFEST
 
 CACHE:
 index.html
-/static/style.css
+/static/css/style.css
 /static/cards.js
-/static/card-cover.jpg
+/static/images/card-cover.jpg
 /static/sound-1.mp3
+/static/page-flip-01a.mp3
+/static/victory-song.mp3
+/static/css/semantic.css
+/static/javascript/jquery-1.11.0.min.js
+/static/javascript/semantic.js
 
